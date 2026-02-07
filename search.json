@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "reports/report.html",
+    "href": "reports/report.html",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#objectif-décisionnel",
+    "href": "reports/report.html#objectif-décisionnel",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#données",
+    "href": "reports/report.html#données",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "2. Données",
+    "text": "2. Données\n\n2.1 Source\nLe projet utilise le dataset Statlog (German Credit Data) (UCI).\nLe fichier brut german.data est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.\n\n\n2.2 Structure des données\nLe dataset Statlog (German Credit Data) est composé de 20 variables explicatives (mélange de variables qualitatives encodées et numériques), ainsi que d’une variable cible.\nLes variables qualitatives sont encodées sous forme de modalités Axx, selon la documentation officielle UCI.\n\nVariables financières et contractuelles\n\nStatus of existing checking account (qualitative)\n\nA11 : &lt; 0 DM\n\nA12 : 0 ≤ … &lt; 200 DM\n\nA13 : ≥ 200 DM / salaire assigné ≥ 1 an\n\nA14 : pas de compte courant\n\nDuration in month (numérique)\nDurée du crédit en mois.\nCredit history (qualitative)\n\nA30 : aucun crédit / tous remboursés\n\nA31 : crédits à cette banque remboursés\n\nA32 : crédits existants correctement remboursés\n\nA33 : retards de paiement dans le passé\n\nA34 : compte critique / autres crédits existants\n\nPurpose (qualitative)\n\nA40 : voiture (neuve)\n\nA41 : voiture (occasion)\n\nA42 : meubles / équipement\n\nA43 : radio / télévision\n\nA44 : électroménager\n\nA45 : réparations\n\nA46 : éducation\n\nA49 : business\n\nA410 : autres\n\nCredit amount (numérique)\nMontant du crédit (en DM).\nSavings account / bonds (qualitative)\n\nA61 : &lt; 100 DM\n\nA62 : 100 ≤ … &lt; 500 DM\n\nA63 : 500 ≤ … &lt; 1000 DM\n\nA64 : ≥ 1000 DM\n\nA65 : inconnu / pas d’épargne\n\n\n\n\nVariables socio-professionnelles\n\nPresent employment since (qualitative)\n\nA71 : sans emploi\n\nA72 : &lt; 1 an\n\nA73 : 1 à 4 ans\n\nA74 : 4 à 7 ans\n\nA75 : ≥ 7 ans\n\nInstallment rate (numérique)\nTaux de mensualité en pourcentage du revenu disponible.\nPersonal status and sex (qualitative)\n\nA91 : homme divorcé / séparé\n\nA92 : femme divorcée / mariée\n\nA93 : homme célibataire\n\nA94 : homme marié / veuf\n\nA95 : femme célibataire\n\nOther debtors / guarantors (qualitative)\n\nA101 : aucun\n\nA102 : co-emprunteur\n\nA103 : garant\n\nPresent residence since (numérique)\nAncienneté de résidence (années).\nProperty (qualitative)\n\nA121 : immobilier\n\nA122 : épargne logement / assurance-vie\n\nA123 : véhicule ou autre\n\nA124 : aucun bien\n\nAge (numérique)\nÂge du client (années).\nOther installment plans (qualitative)\n\nA141 : banque\n\nA142 : magasins\n\nA143 : aucun\n\nHousing (qualitative)\n\nA151 : locataire\n\nA152 : propriétaire\n\nA153 : logement gratuit\n\nNumber of existing credits (numérique)\nNombre de crédits existants dans la banque.\nJob (qualitative)\n\nA171 : sans emploi / non qualifié (non résident)\n\nA172 : non qualifié (résident)\n\nA173 : employé qualifié\n\nA174 : cadre / indépendant / hautement qualifié\n\nNumber of dependents (numérique)\nNombre de personnes à charge.\nTelephone (qualitative)\n\nA191 : aucun\n\nA192 : téléphone enregistré au nom du client\n\nForeign worker (qualitative)\n\nA201 : oui\n\nA202 : non\n\n\n\n\n\n2.3 Cible\nLa cible originale est class :\n\n\n\nclass\nSignification\n\n\n\n\n1\nbon crédit\n\n\n2\nmauvais crédit\n\n\n\nElle est convertie en default :\n\n\n\ndefault\nSignification\n\n\n\n\n1\ndéfaut / mauvais crédit\n\n\n0\nnon défaut"
+  },
+  {
+    "objectID": "reports/report.html#reproductibilité-pipeline-dexécution",
+    "href": "reports/report.html#reproductibilité-pipeline-dexécution",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "3. Reproductibilité & pipeline d’exécution",
+    "text": "3. Reproductibilité & pipeline d’exécution\nLe pipeline est orchestré par R/run_all.R et génère l’ensemble des artefacts utilisés dans ce rapport.\nCommandes :\n# Exécution complète du pipeline\nRscript -e \"source('R/run_all.R')\"\n\n# Génération du rapport\nquarto render"
+  },
+  {
+    "objectID": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "href": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "4. Analyse exploratoire orientée décision (EDA)",
+    "text": "4. Analyse exploratoire orientée décision (EDA)\nCette EDA vise à identifier les profils à risque et à vérifier la cohérence du scoring dans une logique d’aide à la décision crédit.\n\n4.1 Taux de défaut (baseline)\n\n\n\n  \n\n\n\n\n\n4.2 Distribution des probabilités de défaut\nQuestion métier : le modèle sépare-t-il correctement bons et mauvais crédits ?\n\n\n\n\n\n\n\n\n\n\n\n4.3 Politique de décision (3 niveaux)\nQuestion métier : quelle proportion de clients est acceptée, revue ou rejetée ?\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n4.4 Cohérence du risque par décision\nQuestion métier : les décisions sont-elles cohérentes avec le risque estimé ?\n\n\n\n\n\n\n\n\n\n\n\n4.5 Top clients les plus risqués"
+  },
+  {
+    "objectID": "reports/report.html#modélisation",
+    "href": "reports/report.html#modélisation",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "5. Modélisation",
+    "text": "5. Modélisation\nDeux modèles ont été comparés :\n\nRégression logistique (baseline interprétable)\nArbre de décision (tuning léger)\n\n\n\n\n  \n\n\n\nModèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité)."
+  },
+  {
+    "objectID": "reports/report.html#interprétabilité-du-modèle-régression-logistique",
+    "href": "reports/report.html#interprétabilité-du-modèle-régression-logistique",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "6. Interprétabilité du modèle (régression logistique)",
+    "text": "6. Interprétabilité du modèle (régression logistique)\nDans un contexte de risque de crédit, la performance prédictive seule n’est pas suffisante. Il est indispensable de comprendre et expliquer les facteurs qui influencent le risque de défaut, afin de justifier les décisions auprès des équipes métiers et réglementaires.\nLe modèle retenu étant une régression logistique, celle-ci offre une bonne interprétabilité via l’analyse de ses coefficients.\n\n6.1 Principe d’interprétation\nDans une régression logistique :\n\nun coefficient positif augmente la probabilité de défaut,\nun coefficient négatif réduit la probabilité de défaut,\nl’amplitude du coefficient reflète l’intensité de l’effet (toutes choses égales par ailleurs).\n\n\n\n6.2 Importance des variables (coefficients)\nTop 15 variables les plus influentes\n\n\n\n  \n\n\n\n\n\n6.3 Visualisation des effets principaux\n\n\n\n\n\n\n\n\n\n\n\n6.4 Lecture métier des principaux facteurs de risque\nL’analyse des coefficients met en évidence plusieurs facteurs explicatifs clés du défaut :\n\nDurée de crédit élevée\n\nplus la durée est longue, plus le risque de défaut augmente (effet d’exposition).\n\nFaible niveau d’épargne (Savings &lt; 100 DM ou inconnu)\n\nindicateur de faible capacité de résilience financière.\n\nHistorique de crédit dégradé\n\nantécédents de retard ou compte critique fortement corrélés au défaut.\n\nStatut du compte courant défavorable\n\nabsence de compte ou solde négatif associé à un risque plus élevé.\n\nMensualité élevée par rapport au revenu\n\npression financière accrue sur le client.\n\n\nÀ l’inverse, certains facteurs sont associés à une réduction du risque :\n\nancienneté professionnelle élevée,\n\nprésence d’épargne significative,\n\nsituation résidentielle stable (propriétaire).\n\n\n\n6.5 Apport pour la décision crédit\nL’interprétabilité du modèle permet :\n\nde justifier les décisions automatisées,\n\nd’identifier les leviers de mitigation du risque (garanties, durée, apport),\n\nde faciliter l’analyse manuelle des dossiers en review.\n\nElle constitue un prérequis essentiel pour une utilisation opérationnelle du scoring en environnement bancaire ou financier."
+  },
+  {
+    "objectID": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "href": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "7. Choix du seuil & politique de décision",
+    "text": "7. Choix du seuil & politique de décision\n\n7.1 Principe risque (Recall défaut)\nEn risque de crédit, l’objectif est de limiter les défauts non détectés (faux négatifs). Le seuil review est calibré pour garantir Recall(default) ≥ 80% sur le set de test.\n\n\n7.2 Compromis recall / spécificité\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\n\n\nLe seuil reject est défini comme le quantile correspondant aux 10% de scores les plus élevés (top risque), afin d’implémenter une politique prudente."
+  },
+  {
+    "objectID": "reports/report.html#tableau-de-scores-recommandations",
+    "href": "reports/report.html#tableau-de-scores-recommandations",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "8. Tableau de scores & recommandations",
+    "text": "8. Tableau de scores & recommandations\nLe scoring final inclut :\n\nprobabilité de défaut proba_default\ndécision (approve / review / reject)\n\n\n\n\n  \n\n\n\nRecommandations d’usage :\n\napprove : décision automatique\nreview : analyse manuelle / pièces complémentaires / garanties\nreject : rejet (ou validation manager selon politique)"
+  },
+  {
+    "objectID": "reports/report.html#dashboard-shiny",
+    "href": "reports/report.html#dashboard-shiny",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "9. Dashboard Shiny",
+    "text": "9. Dashboard Shiny\nUne application Shiny est fournie dans dashboard/.\nElle permet de :\n\nvisualiser la distribution des scores,\nfiltrer par décision,\nconsulter les lignes les plus risquées.\n\nLancement local :\nCommandes :\nRscript -e \"shiny::runApp('dashboard')\""
+  },
+  {
+    "objectID": "reports/report.html#limites",
+    "href": "reports/report.html#limites",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "10. Limites",
+    "text": "10. Limites\nDataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet."
+  }
+]
