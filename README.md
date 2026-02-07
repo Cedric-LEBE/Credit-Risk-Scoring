@@ -47,14 +47,14 @@ Credit-Risk-Scoring/
 │   └── report.qmd           # Rapport Quarto (HTML)
 │
 ├── dashboard/               # Mini-dashboard Shiny
-│
+├── index.qmd
 ├── session_info.txt         # Informations de session R (reproductibilité)
 ├── README.md
 └── Credit-Risk-Scoring.Rproj
 ```
 ---
 
-## 🔄 Pipeline analytique
+## 🔄 Pipeline d’ingestion et de modélisation
 
 Le pipeline suit une logique **end-to-end** :
 
@@ -102,47 +102,87 @@ Cette logique reflète une **approche prudente** adaptée aux enjeux du risque d
 
 ---
 
-## 📊 Rapport Quarto
+## 🧱 Technologies utilisées
 
-Le rapport fournit :
-- une description des données,
-- une EDA orientée décision,
-- une comparaison des modèles,
-- une analyse d’interprétabilité,
-- une restitution métier claire.
+-	R : pour l'analyse des données, modélisation et restitution décisionnelle
+-	RStudio : environnement de développement
+-	Quarto : pour la génération de rapports HTML reproductibles
+-	Shiny : pour la création du dashboard interactif 
+-	GitHub Pages : pour le déploiement du rapport (Quarto)
+-	shinyapps.io : pour le déploiement du dashboard interactif (Shiny)
 
-### Génération du rapport
+## 🌐 Déploiement
+
+Le projet est déployée et accessible à l’adresse suivante :
+
+🔗 https://cedric-lebe.github.io/Credit-Risk-Scoring/
+
+Cette application centralise l’accès :
+
+-	au rapport analytique (Quarto),
+-	au dashboard interactif (Shiny).
+
+## 📄 Rapport analytique (Quarto)
+
+Le rapport analytique présente :
+
+-	le contexte métier et les objectifs décisionnels,
+-	la structure des données,
+-	une EDA orientée décision,
+-	la comparaison des modèles,
+-	l’interprétabilité du modèle retenu,
+-	la politique de décision crédit.
+
+Accès direct au rapport :
+
+🔗 https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html
+
+## 📊 Dashboard interactif (Shiny)
+
+Le dashboard permet :
+
+-	d’explorer la distribution des scores de défaut,
+-	de filtrer par décision et probabilité de défaut,
+-	d’identifier les clients à risque élevé,
+-	de télécharger les résultats filtrés.
+
+Accès direct au dashboard :
+
+🔗 https://cedric-lebe.shinyapps.io/credit-risk-dashboard/
+
+## ⚡ Exécution rapide en local
+
+### 1. Cloner le dépôt
 
 ```bash
-# 1. Restaurer l'environnement R
+git clone https://github.com/Cedric-LEBE/Credit-Risk-Scoring.git
+cd Credit-Risk-Scoring
+```
+
+### 2. Restaurer l’environnement R (renv)
+```bash
 Rscript -e "install.packages('renv', repos='https://cloud.r-project.org')"
 Rscript -e "renv::restore()"
+```
 
-# 2. Exécuter le pipeline data
+### 3. Exécuter le pipeline d’ingestion et de modélisation
+```bash
 Rscript -e "source('R/run_all.R')"
+```
 
-# 3. Générer le rapport HTML
-quarto render reports/report.qmd
+### 4. Générer l'application (Rapport + Dashboard)
+```bash
+quarto render
+open reports/_site/index.html
+```
 
-# 4. Ouvrir le rapport
+### 5. Générer uniquement le rapport 
+```bash
+quarto render
 open reports/_site/reports/report.html
 ```
 
----
-
-## 📈 Dashboard Shiny
-
-Un dashboard Shiny est inclus pour :
-- visualiser la distribution des scores,
-- filtrer par décision,
-- identifier rapidement les clients à risque.
-
-### Lancer le dashboard Shiny
-
+### 6. Générer uniquement le Dashbord
 ```bash
-# 1. Exécuter le pipeline data
-Rscript -e "source('R/run_all.R')"
-
-# 2. Lancer le dashboard Shiny
 Rscript -e "shiny::runApp('dashboard')"
 ```
