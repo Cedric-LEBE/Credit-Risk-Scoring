@@ -1,0 +1,72 @@
+---
+title: "Score de défaut client"
+subtitle: "Cas métier Finance / Risque — UCI Statlog German Credit"
+author: "Cédric LEBE"
+date: "2026-02-05"
+format:
+  html:
+    toc: true
+    number-sections: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+
+
+## 1. Objectif décisionnel
+
+L’objectif est de **scorer le risque de défaut** d’un client afin de soutenir une décision de crédit.
+La sortie attendue est un **tableau de scores** (probabilité de défaut) et une **politique de décision** opérationnelle :
+
+- *approve* : risque faible
+- *review*  : risque intermédiaire (analyse manuelle / garanties)
+- *reject*  : risque élevé
+
+## 2. Données
+
+### 2.1 Source
+
+Le projet utilise le dataset **Statlog (German Credit Data)** (UCI).  
+Le fichier brut `german.data` est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.
+
+### 2.2 Cible
+
+La cible originale est `class` :
+- `class = 1` : bon crédit
+- `class = 2` : mauvais crédit
+
+Elle est convertie en `default` :
+- `default = 1` : défaut / mauvais crédit
+- `default = 0` : non défaut
+
+## 3. Reproductibilité & pipeline
+
+Le pipeline est orchestré par `R/run_all.R` et génère l’ensemble des artefacts
+utilisés dans ce rapport.
+
+
+
+```{r}
+# Lecture des outputs produits par le pipeline
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+metrics <- read_csv("outputs/tables/model_metrics_test.csv", show_col_types = FALSE)
+decision_summary <- read_csv("outputs/tables/decision_summary.csv", show_col_types = FALSE)
+scores <- read_csv("outputs/tables/client_scores_test.csv", show_col_types = FALSE)
+threshold_metrics <- read_csv("outputs/tables/threshold_metrics.csv", show_col_types = FALSE)
+```
+
+
+
+**Commandes :**
+```bash
+# Exécution complète du pipeline
+Rscript -e "source('R/run_all.R')"
+
+# Génération du rapport
+quarto render
+```

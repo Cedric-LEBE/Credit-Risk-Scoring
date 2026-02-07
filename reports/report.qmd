@@ -1,0 +1,427 @@
+---
+title: "Credit Risk Scoring (Score de défaut client)"
+subtitle: "Cas métier Finance / Risque — UCI Statlog German Credit"
+author: "Cédric LEBE"
+date: "2026-02-05"
+format:
+  html:
+    toc: true
+    number-sections: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## 1. Objectif décisionnel
+
+L’objectif est de **scorer le risque de défaut** d’un client afin de soutenir une décision de crédit.
+La sortie attendue est un **tableau de scores** (probabilité de défaut) et une **politique de décision** opérationnelle :
+
+- *approve* : risque faible
+- *review*  : risque intermédiaire (analyse manuelle / garanties)
+- *reject*  : risque élevé
+
+## 2. Données
+
+### 2.1 Source
+
+Le projet utilise le dataset **Statlog (German Credit Data)** (UCI).  
+Le fichier brut `german.data` est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.
+
+### 2.2 Structure des données
+
+Le dataset **Statlog (German Credit Data)** est composé de **20 variables explicatives**
+(mélange de variables qualitatives encodées et numériques), ainsi que d’une variable cible.
+
+Les variables qualitatives sont encodées sous forme de **modalités Axx**, selon la
+documentation officielle UCI.
+
+#### Variables financières et contractuelles
+
+- **Status of existing checking account** *(qualitative)*  
+  - A11 : < 0 DM  
+  - A12 : 0 ≤ … < 200 DM  
+  - A13 : ≥ 200 DM / salaire assigné ≥ 1 an  
+  - A14 : pas de compte courant  
+
+- **Duration in month** *(numérique)*  
+  Durée du crédit en mois.
+
+- **Credit history** *(qualitative)*  
+  - A30 : aucun crédit / tous remboursés  
+  - A31 : crédits à cette banque remboursés  
+  - A32 : crédits existants correctement remboursés  
+  - A33 : retards de paiement dans le passé  
+  - A34 : compte critique / autres crédits existants  
+
+- **Purpose** *(qualitative)*  
+  - A40 : voiture (neuve)  
+  - A41 : voiture (occasion)  
+  - A42 : meubles / équipement  
+  - A43 : radio / télévision  
+  - A44 : électroménager  
+  - A45 : réparations  
+  - A46 : éducation  
+  - A49 : business  
+  - A410 : autres  
+
+- **Credit amount** *(numérique)*  
+  Montant du crédit (en DM).
+
+- **Savings account / bonds** *(qualitative)*  
+  - A61 : < 100 DM  
+  - A62 : 100 ≤ … < 500 DM  
+  - A63 : 500 ≤ … < 1000 DM  
+  - A64 : ≥ 1000 DM  
+  - A65 : inconnu / pas d’épargne  
+
+#### Variables socio-professionnelles
+
+- **Present employment since** *(qualitative)*  
+  - A71 : sans emploi  
+  - A72 : < 1 an  
+  - A73 : 1 à 4 ans  
+  - A74 : 4 à 7 ans  
+  - A75 : ≥ 7 ans  
+
+- **Installment rate** *(numérique)*  
+  Taux de mensualité en pourcentage du revenu disponible.
+
+- **Personal status and sex** *(qualitative)*  
+  - A91 : homme divorcé / séparé  
+  - A92 : femme divorcée / mariée  
+  - A93 : homme célibataire  
+  - A94 : homme marié / veuf  
+  - A95 : femme célibataire  
+
+- **Other debtors / guarantors** *(qualitative)*  
+  - A101 : aucun  
+  - A102 : co-emprunteur  
+  - A103 : garant  
+
+- **Present residence since** *(numérique)*  
+  Ancienneté de résidence (années).
+
+- **Property** *(qualitative)*  
+  - A121 : immobilier  
+  - A122 : épargne logement / assurance-vie  
+  - A123 : véhicule ou autre  
+  - A124 : aucun bien  
+
+- **Age** *(numérique)*  
+  Âge du client (années).
+
+- **Other installment plans** *(qualitative)*  
+  - A141 : banque  
+  - A142 : magasins  
+  - A143 : aucun  
+
+- **Housing** *(qualitative)*  
+  - A151 : locataire  
+  - A152 : propriétaire  
+  - A153 : logement gratuit  
+
+- **Number of existing credits** *(numérique)*  
+  Nombre de crédits existants dans la banque.
+
+- **Job** *(qualitative)*  
+  - A171 : sans emploi / non qualifié (non résident)  
+  - A172 : non qualifié (résident)  
+  - A173 : employé qualifié  
+  - A174 : cadre / indépendant / hautement qualifié  
+
+- **Number of dependents** *(numérique)*  
+  Nombre de personnes à charge.
+
+- **Telephone** *(qualitative)*  
+  - A191 : aucun  
+  - A192 : téléphone enregistré au nom du client  
+
+- **Foreign worker** *(qualitative)*  
+  - A201 : oui  
+  - A202 : non  
+
+### 2.3 Cible
+
+La cible originale est `class` :
+
+| `class` | Signification          |
+|--------|-------------------------|
+| `1`    | bon crédit |
+| `2`    | mauvais crédit          |
+
+Elle est convertie en **default** :
+
+| `default` | Signification          |
+|--------|-------------------------|
+| `1`    | défaut / mauvais crédit |
+| `0`    | non défaut              |
+
+## 3. Reproductibilité & pipeline d'exécution
+
+Le pipeline est orchestré par `R/run_all.R` et génère l’ensemble des artefacts
+utilisés dans ce rapport.
+
+```{r}
+# Lecture des outputs produits par le pipeline
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(here)
+
+metrics <- read_csv(here("outputs", "tables", "model_metrics_test.csv"), show_col_types = FALSE)
+decision_summary <- read_csv(here("outputs", "tables", "decision_summary.csv"), show_col_types = FALSE)
+scores <- read_csv(here("outputs", "tables", "client_scores_test.csv"), show_col_types = FALSE)
+threshold_metrics <- read_csv(here("outputs", "tables", "threshold_metrics.csv"), show_col_types = FALSE)
+```
+
+**Commandes :**
+```bash
+# Exécution complète du pipeline
+Rscript -e "source('R/run_all.R')"
+
+# Génération du rapport
+quarto render
+```
+
+## 4. Analyse exploratoire orientée décision (EDA)
+
+Cette EDA vise à identifier les profils à risque et à vérifier la cohérence du scoring
+dans une logique d’aide à la décision crédit.
+
+### 4.1 Taux de défaut (baseline)
+
+```{r}
+scores %>%
+  count(default) %>%
+  mutate(p = round(n / sum(n) * 100, 1))
+```
+
+### 4.2 Distribution des probabilités de défaut
+
+Question métier : le modèle sépare-t-il correctement bons et mauvais crédits ?
+
+```{r}
+ggplot(scores, aes(x = proba_default, fill = as.factor(default))) +
+  geom_histogram(bins = 30, alpha = 0.6, position = "identity") +
+  labs(
+    title = "Distribution des probabilités de défaut",
+    x = "Probabilité de défaut",
+    y = "Nombre d'observations",
+    fill = "Default"
+  )
+```
+
+### 4.3 Politique de décision (3 niveaux)
+
+Question métier : quelle proportion de clients est acceptée, revue ou rejetée ?
+
+```{r}
+decision_summary %>%
+  mutate(p = round(p * 100, 1))
+```
+
+```{r}
+ggplot(decision_summary, aes(x = decision, y = n, fill = decision)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Répartition des décisions de crédit",
+    x = "Décision",
+    y = "Nombre de clients"
+  )
+```
+
+### 4.4 Cohérence du risque par décision
+
+Question métier : les décisions sont-elles cohérentes avec le risque estimé ?
+
+```{r}
+ggplot(scores, aes(x = decision, y = proba_default, fill = decision)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Probabilité de défaut par type de décision",
+    x = "Décision",
+    y = "Probabilité de défaut"
+  )
+```
+
+### 4.5 Top clients les plus risqués
+
+```{r}
+scores %>%
+  arrange(desc(proba_default)) %>%
+  head(10)
+```
+
+## 5. Modélisation
+
+Deux modèles ont été comparés :
+
+- Régression logistique (baseline interprétable)
+- Arbre de décision (tuning léger)
+
+```{r}
+metrics
+```
+
+Modèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité).
+
+## 6. Interprétabilité du modèle (régression logistique)
+
+Dans un contexte de **risque de crédit**, la performance prédictive seule n’est pas suffisante.
+Il est indispensable de **comprendre et expliquer** les facteurs qui influencent le risque de défaut,
+afin de justifier les décisions auprès des équipes métiers et réglementaires.
+
+Le modèle retenu étant une **régression logistique**, celle-ci offre une bonne **interprétabilité**
+via l’analyse de ses coefficients.
+
+### 6.1 Principe d’interprétation
+
+Dans une régression logistique :
+
+- un **coefficient positif** augmente la probabilité de défaut,
+- un **coefficient négatif** réduit la probabilité de défaut,
+- l’amplitude du coefficient reflète l’intensité de l’effet (toutes choses égales par ailleurs).
+
+### 6.2 Importance des variables (coefficients)
+
+Top 15 variables les plus influentes
+
+```{r}
+library(tidymodels)
+library(broom)
+library(dplyr)
+library(ggplot2)
+library(here)
+
+# Charger le modèle logistique entraîné
+fit_log <- readRDS(here("outputs", "tables", "fit_logistic.rds"))
+
+# Extraire les coefficients du modèle
+coef_tbl <- tidy(fit_log) %>%
+  filter(term != "(Intercept)") %>%
+  arrange(desc(abs(estimate)))
+
+# Top 15 variables les plus influentes
+top_coef <- coef_tbl %>% head(15)
+
+top_coef
+```
+
+### 6.3 Visualisation des effets principaux
+
+```{r}
+ggplot(top_coef, aes(x = reorder(term, estimate), y = estimate, fill = estimate > 0)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Variables les plus influentes sur le risque de défaut",
+    x = "Variable",
+    y = "Coefficient (log-odds)"
+  )
+```
+
+### 6.4 Lecture métier des principaux facteurs de risque
+
+L’analyse des coefficients met en évidence plusieurs facteurs explicatifs clés du défaut :
+
+- **Durée de crédit élevée**  
+  - plus la durée est longue, plus le risque de défaut augmente (effet d’exposition).
+
+- **Faible niveau d’épargne** (Savings < 100 DM ou inconnu)  
+  - indicateur de faible capacité de résilience financière.
+
+- **Historique de crédit dégradé**  
+  - antécédents de retard ou compte critique fortement corrélés au défaut.
+
+- **Statut du compte courant défavorable**  
+  - absence de compte ou solde négatif associé à un risque plus élevé.
+
+- **Mensualité élevée par rapport au revenu**  
+  - pression financière accrue sur le client.
+
+À l’inverse, certains facteurs sont associés à une réduction du risque :
+
+- ancienneté professionnelle élevée,  
+- présence d’épargne significative,  
+- situation résidentielle stable (propriétaire).  
+
+### 6.5 Apport pour la décision crédit
+
+L’interprétabilité du modèle permet :
+
+- de justifier les décisions automatisées,  
+- d’identifier les leviers de mitigation du risque (garanties, durée, apport),  
+- de faciliter l’analyse manuelle des dossiers en *review*.  
+
+Elle constitue un prérequis essentiel pour une utilisation opérationnelle du scoring en environnement bancaire ou financier.
+
+## 7. Choix du seuil & politique de décision
+
+### 7.1 Principe risque (Recall défaut)
+
+En risque de crédit, l’objectif est de limiter les défauts non détectés (faux négatifs).
+Le seuil review est calibré pour garantir Recall(default) ≥ 80% sur le set de test.
+
+### 7.2 Compromis recall / spécificité
+
+```{r}
+threshold_metrics %>%
+  filter(!is.na(recall)) %>%
+  arrange(desc(recall), desc(specificity)) %>%
+  head(15)
+```
+
+```{r}
+ggplot(threshold_metrics, aes(x = threshold, y = recall)) +
+  geom_line() +
+  geom_hline(yintercept = 0.80, linetype = "dashed") +
+  labs(
+    title = "Recall(default) en fonction du seuil",
+    x = "Seuil",
+    y = "Recall (classe défaut)"
+  )
+```
+
+Le seuil reject est défini comme le quantile correspondant aux 10% de scores les plus élevés (top risque),
+afin d’implémenter une politique prudente.
+
+## 8. Tableau de scores & recommandations
+
+Le scoring final inclut :
+
+-	probabilité de défaut proba_default
+-	décision (approve / review / reject)
+
+```{r}
+head(scores, 10)
+```
+
+Recommandations d’usage :
+
+-	approve : décision automatique
+-	review : analyse manuelle / pièces complémentaires / garanties
+-	reject : rejet (ou validation manager selon politique)
+
+## 9. Dashboard Shiny 
+
+Une application Shiny est fournie dans dashboard/.
+
+Elle permet de :
+
+-	visualiser la distribution des scores,
+-	filtrer par décision,
+-	consulter les lignes les plus risquées.
+
+Lancement local :
+
+**Commandes :**
+
+```bash
+Rscript -e "shiny::runApp('dashboard')"
+```
+
+## 10. Limites 
+
+Dataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet.

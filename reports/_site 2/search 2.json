@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "reports/report.html",
+    "href": "reports/report.html",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#objectif-décisionnel",
+    "href": "reports/report.html#objectif-décisionnel",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#données",
+    "href": "reports/report.html#données",
+    "title": "Score de défaut client",
+    "section": "0.2 2. Données",
+    "text": "0.2 2. Données\n\n0.2.1 2.1 Source\nLe projet utilise le dataset Statlog (German Credit Data) (UCI).\nLe fichier brut german.data est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.\n\n\n0.2.2 2.2 Cible\nLa cible originale est class : - class = 1 : bon crédit - class = 2 : mauvais crédit\nElle est convertie en default : - default = 1 : défaut / mauvais crédit - default = 0 : non défaut"
+  },
+  {
+    "objectID": "reports/report.html#reproductibilité-pipeline",
+    "href": "reports/report.html#reproductibilité-pipeline",
+    "title": "Score de défaut client",
+    "section": "0.3 3. Reproductibilité & pipeline",
+    "text": "0.3 3. Reproductibilité & pipeline\nLe pipeline est orchestré par R/run_all.R et génère l’ensemble des artefacts utilisés dans ce rapport."
+  }
+]

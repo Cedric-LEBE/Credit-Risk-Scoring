@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "reports/report.html",
+    "href": "reports/report.html",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#objectif-décisionnel",
+    "href": "reports/report.html#objectif-décisionnel",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#données",
+    "href": "reports/report.html#données",
+    "title": "Score de défaut client",
+    "section": "2 2. Données",
+    "text": "2 2. Données\n\n2.1 2.1 Source\nLe projet utilise le dataset Statlog (German Credit Data) (UCI).\nLe fichier brut german.data est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.\n\n\n2.2 2.2 Cible\nLa cible originale est class : - class = 1 : bon crédit - class = 2 : mauvais crédit\nElle est convertie en default : - default = 1 : défaut / mauvais crédit - default = 0 : non défaut"
+  },
+  {
+    "objectID": "reports/report.html#reproductibilité-pipeline",
+    "href": "reports/report.html#reproductibilité-pipeline",
+    "title": "Score de défaut client",
+    "section": "3 3. Reproductibilité & pipeline",
+    "text": "3 3. Reproductibilité & pipeline\nLe pipeline est orchestré par R/run_all.R et génère l’ensemble des artefacts utilisés dans ce rapport.\n\n\nCode\n# Lecture des outputs produits par le pipeline\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(here)\n\nmetrics &lt;- read_csv(here(\"outputs\", \"tables\", \"model_metrics_test.csv\"), show_col_types = FALSE)\ndecision_summary &lt;- read_csv(here(\"outputs\", \"tables\", \"decision_summary.csv\"), show_col_types = FALSE)\nscores &lt;- read_csv(here(\"outputs\", \"tables\", \"client_scores_test.csv\"), show_col_types = FALSE)\nthreshold_metrics &lt;- read_csv(here(\"outputs\", \"tables\", \"threshold_metrics.csv\"), show_col_types = FALSE)\n\n\nCommandes :\n# Exécution complète du pipeline\nRscript -e \"source('R/run_all.R')\"\n\n# Génération du rapport\nquarto render"
+  },
+  {
+    "objectID": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "href": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "title": "Score de défaut client",
+    "section": "4 4. Analyse exploratoire orientée décision (EDA)",
+    "text": "4 4. Analyse exploratoire orientée décision (EDA)\nCette EDA vise à identifier les profils à risque et à vérifier la cohérence du scoring dans une logique d’aide à la décision crédit.\n\n4.1 4.1 Taux de défaut (baseline)\n\n\nCode\nscores %&gt;%\n  count(default) %&gt;%\n  mutate(p = round(n / sum(n) * 100, 1))\n\n\n\n  \n\n\n\n\n\n4.2 4.2 Distribution des probabilités de défaut\nQuestion métier : le modèle sépare-t-il correctement bons et mauvais crédits ?\n\n\nCode\nggplot(scores, aes(x = proba_default, fill = as.factor(default))) +\n  geom_histogram(bins = 30, alpha = 0.6, position = \"identity\") +\n  labs(\n    title = \"Distribution des probabilités de défaut\",\n    x = \"Probabilité de défaut\",\n    y = \"Nombre d'observations\",\n    fill = \"Default\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.3 4.3 Politique de décision (3 niveaux)\nQuestion métier : quelle proportion de clients est acceptée, revue ou rejetée ?\n\n\nCode\ndecision_summary %&gt;%\n  mutate(p = round(p * 100, 1))\n\n\n\n  \n\n\n\n\n\nCode\nggplot(decision_summary, aes(x = decision, y = n, fill = decision)) +\n  geom_col(show.legend = FALSE) +\n  labs(\n    title = \"Répartition des décisions de crédit\",\n    x = \"Décision\",\n    y = \"Nombre de clients\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.4 4.4 Cohérence du risque par décision\nQuestion métier : les décisions sont-elles cohérentes avec le risque estimé ?\n\n\nCode\nggplot(scores, aes(x = decision, y = proba_default, fill = decision)) +\n  geom_boxplot(show.legend = FALSE) +\n  labs(\n    title = \"Probabilité de défaut par type de décision\",\n    x = \"Décision\",\n    y = \"Probabilité de défaut\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.5 4.5 Top clients les plus risqués\n\n\nCode\nscores %&gt;%\n  arrange(desc(proba_default)) %&gt;%\n  head(10)"
+  },
+  {
+    "objectID": "reports/report.html#modélisation",
+    "href": "reports/report.html#modélisation",
+    "title": "Score de défaut client",
+    "section": "5 5. Modélisation",
+    "text": "5 5. Modélisation\nDeux modèles ont été comparés :\n\nRégression logistique (baseline interprétable)\nArbre de décision (tuning léger)\n\n\n\nCode\nmetrics\n\n\n\n  \n\n\n\nModèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité)."
+  },
+  {
+    "objectID": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "href": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "title": "Score de défaut client",
+    "section": "6 6. Choix du seuil & politique de décision",
+    "text": "6 6. Choix du seuil & politique de décision\n\n6.1 6.1 Principe risque (Recall défaut)\nEn risque de crédit, l’objectif est de limiter les défauts non détectés (faux négatifs). Le seuil review est calibré pour garantir Recall(default) ≥ 80% sur le set de test.\n\n\n6.2 6.2 Compromis recall / spécificité\nAperçu des seuils (on observe recall/specificity/precision/f1) :\n\n\nCode\nthreshold_metrics %&gt;%\n  filter(!is.na(recall)) %&gt;%\n  arrange(desc(recall), desc(specificity)) %&gt;%\n  head(15)\n\n\n\n  \n\n\n\n\n\nCode\nggplot(threshold_metrics, aes(x = threshold, y = recall)) +\n  geom_line() +\n  geom_hline(yintercept = 0.80, linetype = \"dashed\") +\n  labs(\n    title = \"Recall(default) en fonction du seuil\",\n    x = \"Seuil\",\n    y = \"Recall (classe défaut)\"\n  )\n\n\n\n\n\n\n\n\n\nLe seuil reject est défini comme le quantile correspondant aux 10% de scores les plus élevés (top risque), afin d’implémenter une politique prudente."
+  },
+  {
+    "objectID": "reports/report.html#tableau-de-scores-recommandations",
+    "href": "reports/report.html#tableau-de-scores-recommandations",
+    "title": "Score de défaut client",
+    "section": "7 7. Tableau de scores & recommandations",
+    "text": "7 7. Tableau de scores & recommandations\nLe scoring final inclut :\n\nprobabilité de défaut proba_default\ndécision (approve / review / reject)\n\n\n\nCode\nhead(scores, 10)\n\n\n\n  \n\n\n\nRecommandations d’usage :\n\napprove : décision automatique"
+  }
+]

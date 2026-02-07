@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "reports/report.html",
+    "href": "reports/report.html",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#objectif-décisionnel",
+    "href": "reports/report.html#objectif-décisionnel",
+    "title": "Score de défaut client",
+    "section": "",
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+  },
+  {
+    "objectID": "reports/report.html#données",
+    "href": "reports/report.html#données",
+    "title": "Score de défaut client",
+    "section": "2 2. Données",
+    "text": "2 2. Données\n\n2.1 2.1 Source\nLe projet utilise le dataset Statlog (German Credit Data) (UCI).\nLe fichier brut german.data est encodé (modalités Axx) et converti automatiquement en CSV par le pipeline.\n\n\n2.2 2.2 Structure des données\nLe dataset Statlog (German Credit Data) est composé de 20 variables explicatives (mélange de variables qualitatives encodées et numériques), ainsi que d’une variable cible.\nLes variables qualitatives sont encodées sous forme de modalités Axx, selon la documentation officielle UCI.\n\n2.2.1 Variables financières et contractuelles\n\nStatus of existing checking account (qualitative)\n\nA11 : &lt; 0 DM\n\nA12 : 0 ≤ … &lt; 200 DM\n\nA13 : ≥ 200 DM / salaire assigné ≥ 1 an\n\nA14 : pas de compte courant\n\nDuration in month (numérique)\nDurée du crédit en mois.\nCredit history (qualitative)\n\nA30 : aucun crédit / tous remboursés\n\nA31 : crédits à cette banque remboursés\n\nA32 : crédits existants correctement remboursés\n\nA33 : retards de paiement dans le passé\n\nA34 : compte critique / autres crédits existants\n\nPurpose (qualitative)\n\nA40 : voiture (neuve)\n\nA41 : voiture (occasion)\n\nA42 : meubles / équipement\n\nA43 : radio / télévision\n\nA44 : électroménager\n\nA45 : réparations\n\nA46 : éducation\n\nA49 : business\n\nA410 : autres\n\nCredit amount (numérique)\nMontant du crédit (en DM).\nSavings account / bonds (qualitative)\n\nA61 : &lt; 100 DM\n\nA62 : 100 ≤ … &lt; 500 DM\n\nA63 : 500 ≤ … &lt; 1000 DM\n\nA64 : ≥ 1000 DM\n\nA65 : inconnu / pas d’épargne\n\n\n\n\n2.2.2 Variables socio-professionnelles\n\nPresent employment since (qualitative)\n\nA71 : sans emploi\n\nA72 : &lt; 1 an\n\nA73 : 1 à 4 ans\n\nA74 : 4 à 7 ans\n\nA75 : ≥ 7 ans\n\nInstallment rate (numérique)\nTaux de mensualité en pourcentage du revenu disponible.\nPersonal status and sex (qualitative)\n\nA91 : homme divorcé / séparé\n\nA92 : femme divorcée / mariée\n\nA93 : homme célibataire\n\nA94 : homme marié / veuf\n\nA95 : femme célibataire\n\nOther debtors / guarantors (qualitative)\n\nA101 : aucun\n\nA102 : co-emprunteur\n\nA103 : garant\n\nPresent residence since (numérique)\nAncienneté de résidence (années).\nProperty (qualitative)\n\nA121 : immobilier\n\nA122 : épargne logement / assurance-vie\n\nA123 : véhicule ou autre\n\nA124 : aucun bien\n\nAge (numérique)\nÂge du client (années).\nOther installment plans (qualitative)\n\nA141 : banque\n\nA142 : magasins\n\nA143 : aucun\n\nHousing (qualitative)\n\nA151 : locataire\n\nA152 : propriétaire\n\nA153 : logement gratuit\n\nNumber of existing credits (numérique)\nNombre de crédits existants dans la banque.\nJob (qualitative)\n\nA171 : sans emploi / non qualifié (non résident)\n\nA172 : non qualifié (résident)\n\nA173 : employé qualifié\n\nA174 : cadre / indépendant / hautement qualifié\n\nNumber of dependents (numérique)\nNombre de personnes à charge.\nTelephone (qualitative)\n\nA191 : aucun\n\nA192 : téléphone enregistré au nom du client\n\nForeign worker (qualitative)\n\nA201 : oui\n\nA202 : non\n\n\n\n\n\n2.3 2.3 Cible\nLa cible originale est class : - class = 1 : bon crédit - class = 2 : mauvais crédit\nElle est convertie en default : - default = 1 : défaut / mauvais crédit - default = 0 : non défaut"
+  },
+  {
+    "objectID": "reports/report.html#reproductibilité-pipeline",
+    "href": "reports/report.html#reproductibilité-pipeline",
+    "title": "Score de défaut client",
+    "section": "3 3. Reproductibilité & pipeline",
+    "text": "3 3. Reproductibilité & pipeline\nLe pipeline est orchestré par R/run_all.R et génère l’ensemble des artefacts utilisés dans ce rapport.\n\n\nCode\n# Lecture des outputs produits par le pipeline\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(here)\n\nmetrics &lt;- read_csv(here(\"outputs\", \"tables\", \"model_metrics_test.csv\"), show_col_types = FALSE)\ndecision_summary &lt;- read_csv(here(\"outputs\", \"tables\", \"decision_summary.csv\"), show_col_types = FALSE)\nscores &lt;- read_csv(here(\"outputs\", \"tables\", \"client_scores_test.csv\"), show_col_types = FALSE)\nthreshold_metrics &lt;- read_csv(here(\"outputs\", \"tables\", \"threshold_metrics.csv\"), show_col_types = FALSE)\n\n\nCommandes :\n# Exécution complète du pipeline\nRscript -e \"source('R/run_all.R')\"\n\n# Génération du rapport\nquarto render"
+  },
+  {
+    "objectID": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "href": "reports/report.html#analyse-exploratoire-orientée-décision-eda",
+    "title": "Score de défaut client",
+    "section": "4 4. Analyse exploratoire orientée décision (EDA)",
+    "text": "4 4. Analyse exploratoire orientée décision (EDA)\nCette EDA vise à identifier les profils à risque et à vérifier la cohérence du scoring dans une logique d’aide à la décision crédit.\n\n4.1 4.1 Taux de défaut (baseline)\n\n\nCode\nscores %&gt;%\n  count(default) %&gt;%\n  mutate(p = round(n / sum(n) * 100, 1))\n\n\n\n  \n\n\n\n\n\n4.2 4.2 Distribution des probabilités de défaut\nQuestion métier : le modèle sépare-t-il correctement bons et mauvais crédits ?\n\n\nCode\nggplot(scores, aes(x = proba_default, fill = as.factor(default))) +\n  geom_histogram(bins = 30, alpha = 0.6, position = \"identity\") +\n  labs(\n    title = \"Distribution des probabilités de défaut\",\n    x = \"Probabilité de défaut\",\n    y = \"Nombre d'observations\",\n    fill = \"Default\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.3 4.3 Politique de décision (3 niveaux)\nQuestion métier : quelle proportion de clients est acceptée, revue ou rejetée ?\n\n\nCode\ndecision_summary %&gt;%\n  mutate(p = round(p * 100, 1))\n\n\n\n  \n\n\n\n\n\nCode\nggplot(decision_summary, aes(x = decision, y = n, fill = decision)) +\n  geom_col(show.legend = FALSE) +\n  labs(\n    title = \"Répartition des décisions de crédit\",\n    x = \"Décision\",\n    y = \"Nombre de clients\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.4 4.4 Cohérence du risque par décision\nQuestion métier : les décisions sont-elles cohérentes avec le risque estimé ?\n\n\nCode\nggplot(scores, aes(x = decision, y = proba_default, fill = decision)) +\n  geom_boxplot(show.legend = FALSE) +\n  labs(\n    title = \"Probabilité de défaut par type de décision\",\n    x = \"Décision\",\n    y = \"Probabilité de défaut\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n4.5 4.5 Top clients les plus risqués\n\n\nCode\nscores %&gt;%\n  arrange(desc(proba_default)) %&gt;%\n  head(10)"
+  },
+  {
+    "objectID": "reports/report.html#modélisation",
+    "href": "reports/report.html#modélisation",
+    "title": "Score de défaut client",
+    "section": "5 5. Modélisation",
+    "text": "5 5. Modélisation\nDeux modèles ont été comparés :\n\nRégression logistique (baseline interprétable)\nArbre de décision (tuning léger)\n\n\n\nCode\nmetrics\n\n\n\n  \n\n\n\nModèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité)."
+  },
+  {
+    "objectID": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "href": "reports/report.html#choix-du-seuil-politique-de-décision",
+    "title": "Score de défaut client",
+    "section": "6 6. Choix du seuil & politique de décision",
+    "text": "6 6. Choix du seuil & politique de décision\n\n6.1 6.1 Principe risque (Recall défaut)\nEn risque de crédit, l’objectif est de limiter les défauts non détectés (faux négatifs). Le seuil review est calibré pour garantir Recall(default) ≥ 80% sur le set de test.\n\n\n6.2 6.2 Compromis recall / spécificité\nAperçu des seuils (on observe recall/specificity/precision/f1) :\n\n\nCode\nthreshold_metrics %&gt;%\n  filter(!is.na(recall)) %&gt;%\n  arrange(desc(recall), desc(specificity)) %&gt;%\n  head(15)\n\n\n\n  \n\n\n\n\n\nCode\nggplot(threshold_metrics, aes(x = threshold, y = recall)) +\n  geom_line() +\n  geom_hline(yintercept = 0.80, linetype = \"dashed\") +\n  labs(\n    title = \"Recall(default) en fonction du seuil\",\n    x = \"Seuil\",\n    y = \"Recall (classe défaut)\"\n  )\n\n\n\n\n\n\n\n\n\nLe seuil reject est défini comme le quantile correspondant aux 10% de scores les plus élevés (top risque), afin d’implémenter une politique prudente."
+  },
+  {
+    "objectID": "reports/report.html#tableau-de-scores-recommandations",
+    "href": "reports/report.html#tableau-de-scores-recommandations",
+    "title": "Score de défaut client",
+    "section": "7 7. Tableau de scores & recommandations",
+    "text": "7 7. Tableau de scores & recommandations\nLe scoring final inclut :\n\nprobabilité de défaut proba_default\ndécision (approve / review / reject)\n\n\n\nCode\nhead(scores, 10)\n\n\n\n  \n\n\n\nRecommandations d’usage :\n\napprove : décision automatique\n\n\n\nCode\nlibrary(tidymodels)\nlibrary(broom)\nlibrary(dplyr)\nlibrary(ggplot2)\n\n# Charger le modèle logistique entraîné\nfit_log &lt;- readRDS(here::here(\"outputs\", \"tables\", \"fit_logistic.rds\"))\n\n# Extraire les coefficients du modèle\ncoef_tbl &lt;- tidy(fit_log) %&gt;%\n  filter(term != \"(Intercept)\") %&gt;%\n  arrange(desc(abs(estimate)))\n\n# Top 15 variables les plus influentes\ntop_coef &lt;- coef_tbl %&gt;% head(15)\n\ntop_coef\n\n\n\n  \n\n\n\n6.3 Visualisation des effets principaux\n\n\nCode\nggplot(top_coef, aes(x = reorder(term, estimate), y = estimate, fill = estimate &gt; 0)) +\n  geom_col(show.legend = FALSE) +\n  coord_flip() +\n  labs(\n    title = \"Variables les plus influentes sur le risque de défaut\",\n    x = \"Variable\",\n    y = \"Coefficient (log-odds)\"\n  )\n\n\n\n\n\n\n\n\n\n6.4 Lecture métier des principaux facteurs de risque\nL’analyse des coefficients met en évidence plusieurs facteurs explicatifs clés du défaut : • Durée de crédit élevée → plus la durée est longue, plus le risque de défaut augmente (effet d’exposition). • Faible niveau d’épargne (Savings &lt; 100 DM ou inconnu) → indicateur de faible capacité de résilience financière. • Historique de crédit dégradé → antécédents de retard ou compte critique fortement corrélés au défaut. • Statut du compte courant défavorable → absence de compte ou solde négatif associé à un risque plus élevé. • Mensualité élevée par rapport au revenu → pression financière accrue sur le client.\nÀ l’inverse, certains facteurs sont associés à une réduction du risque : • Ancienneté professionnelle élevée • Présence d’épargne significative • Situation résidentielle stable (propriétaire)"
+  }
+]

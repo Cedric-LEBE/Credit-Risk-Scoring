@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: reports/_site
+  render:
+    - reports/report.qmd
+
+website:
+  title: "Credit Risk Scoring"
+  navbar:
+    left:
+      - text: "Rapport"
+        href: reports/report.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: false
+    code-fold: true
+    code-tools: true
+    df-print: paged
+    embed-resources: true

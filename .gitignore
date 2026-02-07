@@ -1,0 +1,34 @@
+# R / RStudio
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+.Rproj.user/
+
+# renv
+renv/library/
+renv/staging/
+renv/python/
+renv/local/
+renv.lock.bak
+
+# Quarto / outputs
+.quarto/
+_site/
+*.knit.md
+*.utf8.md
+/.quarto/
+**/.quarto/
+**/*_cache/
+**/*_files/
+
+# Logs
+*.log
+
+# Shiny
+rsconnect/
+
+# OS
+.DS_Store
+Thumbs.db
+
