@@ -2,14 +2,19 @@ project:
   type: website
   output-dir: reports/_site
   render:
+    - index.qmd
     - reports/report.qmd
 
 website:
   title: "Credit Risk Scoring"
   navbar:
     left:
+      - text: "Accueil"
+        href: index.html
       - text: "Rapport"
-        href: reports/report.qmd
+        href: reports/report.html
+      - text: "Dashboard"
+        href: https://cedric-lebe.shinyapps.io/credit-risk-dashboard/
 
 format:
   html:

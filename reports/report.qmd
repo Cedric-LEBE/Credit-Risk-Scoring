@@ -406,7 +406,7 @@ Recommandations d’usage :
 
 ## 9. Dashboard Shiny 
 
-Une application Shiny est fournie dans dashboard/.
+Une application Shiny est fournie dans l'onglet [Dashboard](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/).
 
 Elle permet de :
 

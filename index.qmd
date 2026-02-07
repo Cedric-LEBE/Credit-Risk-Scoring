@@ -1,0 +1,81 @@
+---
+title: "Credit Risk Scoring (Score de défaut client)"
+subtitle: "Projet décisionnel — Finance / Risque (UCI Statlog German Credit)"
+author: "Cédric LEBE"
+date: "2026-02-05"
+format:
+  html:
+    toc: false
+    number-sections: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## Accès rapide
+
+::: {.columns}
+::: {.column width="50%"}
+
+### 📄 Rapport décisionnel
+
+- Méthodologie, EDA, modélisation
+- Seuils métier & politique de décision
+- Interprétabilité (régression logistique)
+
+[➡️ Ouvrir le rapport](reports/report.html)
+
+:::
+::: {.column width="50%"}
+
+### 📊 Dashboard interactif
+
+- Filtrer les clients (decision / vérité / score)
+- KPI & distribution des scores
+- Analyse seuils + top clients à risque
+- Export CSV
+
+[➡️ Ouvrir le dashboard](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/)
+
+:::
+:::
+
+---
+
+## Contexte
+
+Ce projet met en œuvre une **chaîne décisionnelle complète** de scoring crédit :
+
+- ingestion → préparation → features → modèle → scoring
+- restitution : **rapport Quarto** + **dashboard Shiny**
+- reproductibilité : `renv.lock`
+
+---
+
+## Exécution locale
+
+1. Restaurer les dépendances :
+
+```bash
+Rscript -e "install.packages('renv', repos='https://cloud.r-project.org')"
+Rscript -e "renv::restore()"
+```
+
+2.	Exécuter le pipeline :
+
+```bash
+Rscript -e "source('R/run_all.R')"
+```
+
+3.	Générer le rapport :
+
+```bash
+quarto render
+```
+
+4.	Lancer le dashboard :
+
+```bash
+Rscript -e "shiny::runApp('dashboard')"
+```
