@@ -28,7 +28,7 @@ reports/_site/
 
 # Logs
 *.log
-session_info.txt
+**/session_info.txt
 
 # Shiny
 rsconnect/
