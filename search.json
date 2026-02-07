@@ -67,7 +67,7 @@
     "href": "reports/report.html#dashboard-shiny",
     "title": "Credit Risk Scoring (Score de défaut client)",
     "section": "9. Dashboard Shiny",
-    "text": "9. Dashboard Shiny\nUne application Shiny est fournie dans dashboard/.\nElle permet de :\n\nvisualiser la distribution des scores,\nfiltrer par décision,\nconsulter les lignes les plus risquées.\n\nLancement local :\nCommandes :\nRscript -e \"shiny::runApp('dashboard')\""
+    "text": "9. Dashboard Shiny\nUne application Shiny est fournie dans l’onglet Dashboard.\nElle permet de :\n\nvisualiser la distribution des scores,\nfiltrer par décision,\nconsulter les lignes les plus risquées.\n\nLancement local :\nCommandes :\nRscript -e \"shiny::runApp('dashboard')\""
   },
   {
     "objectID": "reports/report.html#limites",
@@ -75,5 +75,33 @@
     "title": "Credit Risk Scoring (Score de défaut client)",
     "section": "10. Limites",
     "text": "10. Limites\nDataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "",
+    "text": "Méthodologie, EDA, modélisation\nSeuils métier & politique de décision\nInterprétabilité (régression logistique)\n\n➡️ Ouvrir le rapport\n\n\n\n\n\nFiltrer les clients (decision / vérité / score)\nKPI & distribution des scores\nAnalyse seuils + top clients à risque\nExport CSV\n\n➡️ Ouvrir le dashboard"
+  },
+  {
+    "objectID": "index.html#accès-rapide",
+    "href": "index.html#accès-rapide",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "",
+    "text": "Méthodologie, EDA, modélisation\nSeuils métier & politique de décision\nInterprétabilité (régression logistique)\n\n➡️ Ouvrir le rapport\n\n\n\n\n\nFiltrer les clients (decision / vérité / score)\nKPI & distribution des scores\nAnalyse seuils + top clients à risque\nExport CSV\n\n➡️ Ouvrir le dashboard"
+  },
+  {
+    "objectID": "index.html#contexte",
+    "href": "index.html#contexte",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "Contexte",
+    "text": "Contexte\nCe projet met en œuvre une chaîne décisionnelle complète de scoring crédit :\n\ningestion → préparation → features → modèle → scoring\nrestitution : rapport Quarto + dashboard Shiny\nreproductibilité : renv.lock"
+  },
+  {
+    "objectID": "index.html#exécution-locale",
+    "href": "index.html#exécution-locale",
+    "title": "Credit Risk Scoring (Score de défaut client)",
+    "section": "Exécution locale",
+    "text": "Exécution locale\n\nRestaurer les dépendances :\n\nRscript -e \"install.packages('renv', repos='https://cloud.r-project.org')\"\nRscript -e \"renv::restore()\"\n\nExécuter le pipeline :\n\nRscript -e \"source('R/run_all.R')\"\n\nGénérer le rapport :\n\nquarto render\n\nLancer le dashboard :\n\nRscript -e \"shiny::runApp('dashboard')\""
   }
 ]
