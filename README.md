@@ -1,4 +1,4 @@
-# Score de défaut client 
+# 🏦 Credit Risk Scoring (Score de défaut client)
 
 ## Objectif
 
@@ -50,7 +50,7 @@ Credit-Risk-Scoring/
 │
 ├── session_info.txt         # Informations de session R (reproductibilité)
 ├── README.md
-└── decisionnel-R-projet.Rproj
+└── Credit-Risk-Scoring.Rproj
 ```
 ---
 
@@ -114,13 +114,17 @@ Le rapport fournit :
 ### Génération du rapport
 
 ```bash
-# Exécution complète du pipeline
+# 1. Restaurer l'environnement R
+Rscript -e "install.packages('renv', repos='https://cloud.r-project.org')"
+Rscript -e "renv::restore()"
+
+# 2. Exécuter le pipeline data
 Rscript -e "source('R/run_all.R')"
 
-# Génération du rapport HTML
+# 3. Générer le rapport HTML
 quarto render reports/report.qmd
 
-# Lecture du rapport
+# 4. Ouvrir le rapport
 open reports/_site/reports/report.html
 ```
 
@@ -128,13 +132,17 @@ open reports/_site/reports/report.html
 
 ## 📈 Dashboard Shiny
 
-Un mini-dashboard Shiny est inclus pour :
+Un dashboard Shiny est inclus pour :
 - visualiser la distribution des scores,
 - filtrer par décision,
 - identifier rapidement les clients à risque.
 
 ### Lancer le dashboard Shiny
 
-```r
-shiny::runApp("dashbord")
+```bash
+# 1. Exécuter le pipeline data
+Rscript -e "source('R/run_all.R')"
+
+# 2. Lancer le dashboard Shiny
+Rscript -e "shiny::runApp('dashboard')"
 ```
