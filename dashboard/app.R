@@ -75,12 +75,27 @@ ui <- fluidPage(
     .kpi-value{font-size:22px; font-weight:700;}
     .subtle{color:#666;}
     .section-title{margin-top:16px;}
+    .linkbox a{
+      display:block;
+      padding:8px 10px;
+      border:1px solid #eee;
+      border-radius:12px;
+      text-decoration:none;
+    }
+
+    .linkbox a:hover{
+      background:#fafafa;
+    }
   ")),
-  
-  titlePanel("Credit Risk Scoring"),
+
+  titlePanel("Credit Risk Scoring - Dashboard"),
   
   sidebarLayout(
     sidebarPanel(
+        div(class = "linkbox",
+          tags$a("🏠 Accueil ", href = "https://cedric-lebe.github.io/Credit-Risk-Scoring/"),
+          tags$a("📄 Rapport ", href = "https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html")
+      ),
       h4("Filtres"),
       selectInput(
         "decision",
