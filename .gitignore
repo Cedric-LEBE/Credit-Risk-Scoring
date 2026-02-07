@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.Rapp.history
 *.Rproj.user/
 .Rproj.user/
 
@@ -21,6 +22,9 @@ _site/
 **/.quarto/
 **/*_cache/
 **/*_files/
+
+# Reports
+reports/_site/
 
 # Logs
 *.log
