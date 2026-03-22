@@ -80,6 +80,17 @@ saveRDS(
   here::here("outputs", "tables", "chosen_threshold.rds")
 )
 
+# Export pour interopérabilité Python (Streamlit)
+readr::write_csv(
+  data.frame(
+    threshold = best$threshold[[1]],
+    target_recall = target_recall
+  ),
+  here::here("outputs", "tables", "chosen_threshold.csv")
+)
+
+log_msg("[06b_threshold] Exported chosen_threshold.csv")
+
 log_msg("[06b_threshold] Chosen threshold:", best$threshold[[1]],
         "| recall:", round(best$recall[[1]], 3),
         "| specificity:", round(best$specificity[[1]], 3),

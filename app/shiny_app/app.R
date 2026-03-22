@@ -1,6 +1,3 @@
-# dashboard/app.R ----
-# Dashboard décisionnel (Score défaut)
-
 library(shiny)
 library(dplyr)
 library(readr)
@@ -75,27 +72,12 @@ ui <- fluidPage(
     .kpi-value{font-size:22px; font-weight:700;}
     .subtle{color:#666;}
     .section-title{margin-top:16px;}
-    .linkbox a{
-      display:block;
-      padding:8px 10px;
-      border:1px solid #eee;
-      border-radius:12px;
-      text-decoration:none;
-    }
-
-    .linkbox a:hover{
-      background:#fafafa;
-    }
   ")),
 
-  titlePanel("Credit Risk Scoring - Dashboard"),
+  titlePanel("Credit Risk Scoring"),
   
   sidebarLayout(
     sidebarPanel(
-        div(class = "linkbox",
-          tags$a("🏠 Accueil ", href = "https://cedric-lebe.github.io/Credit-Risk-Scoring/"),
-          tags$a("📄 Rapport ", href = "https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html")
-      ),
       h4("Filtres"),
       selectInput(
         "decision",
@@ -118,12 +100,9 @@ ui <- fluidPage(
       ),
       hr(),
       h4("Seuils"),
-      #helpText("review = seuil calibré (Recall ≥ 80%); reject = top 10% risques (quantile)."),
       verbatimTextOutput("thresholds_box"),
       hr(),
       h4("Actions"),
-      actionButton("reload", "Recharger les fichiers outputs/"),
-      br(), br(),
       downloadButton("download_scores", "Télécharger le scoring filtré (CSV)")
     ),
     
@@ -135,7 +114,7 @@ ui <- fluidPage(
         column(4, div(class = "kpi-box",
                       div(class = "kpi-title", "Taux de défaut (filtré)"),
                       div(class = "kpi-value", textOutput("kpi_default_rate")),
-                      div(class = "subtle", "Sur le sous-ensemble affiché"))),
+                      )),
         column(4, div(class = "kpi-box",
                       div(class = "kpi-title", "Score moyen P(défaut)"),
                       div(class = "kpi-value", textOutput("kpi_mean_p"))))

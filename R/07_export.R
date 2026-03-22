@@ -17,7 +17,7 @@ test    <- rsample::testing(split)
 fit_log <- readRDS(here::here("outputs", "tables", "fit_logistic.rds"))
 
 thr_obj <- readRDS(here::here("outputs", "tables", "chosen_threshold.rds"))
-thr_review <- thr_obj$threshold   # ex: 0.17 (recall >= 0.80)
+thr_review <- thr_obj$threshold   
 
 test <- test %>% dplyr::mutate(default = make_default_factor(default))
 

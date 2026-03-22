@@ -2,7 +2,7 @@
 title: "Credit Risk Scoring (Score de défaut client)"
 subtitle: "Cas métier Finance / Risque — UCI Statlog German Credit"
 author: "Cédric LEBE"
-date: "2026-02-05"
+date: "2026-03-16"
 format:
   html:
     toc: true
@@ -19,7 +19,7 @@ L’objectif est de **scorer le risque de défaut** d’un client afin de souten
 La sortie attendue est un **tableau de scores** (probabilité de défaut) et une **politique de décision** opérationnelle :
 
 - *approve* : risque faible
-- *review*  : risque intermédiaire (analyse manuelle / garanties)
+- *review*  : risque intermédiaire (analyse manuelle)
 - *reject*  : risque élevé
 
 ## 2. Données
@@ -259,7 +259,7 @@ scores %>%
 Deux modèles ont été comparés :
 
 - Régression logistique (baseline interprétable)
-- Arbre de décision (tuning léger)
+- Arbre de décision (tuning)
 
 ```{r}
 metrics
@@ -404,24 +404,28 @@ Recommandations d’usage :
 -	review : analyse manuelle / pièces complémentaires / garanties
 -	reject : rejet (ou validation manager selon politique)
 
-## 9. Dashboard Shiny 
+## 9. Dashboard Shiny & Streamlit
 
-Une application Shiny est fournie dans l'onglet [Dashboard](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/).
+Deux applications interactives, **Shiny** et **Streamlit**, sont fournies et accessibles via les liens ci-dessous :
 
-Elle permet de :
+- [Shiny](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/)
+- [Streamlit](https://cedric-lebe.cedric-lebe.streamlit.app/)
+
+Ces applications permettent de :
 
 -	visualiser la distribution des scores,
 -	filtrer par décision,
--	consulter les lignes les plus risquées.
+-	consulter les utilisateurs les plus risqués.
 
-Lancement local :
+Elles illustrent également l’**interopérabilité entre R et Python**, les visualisations Streamlit reposant sur des exports générés par le pipeline **R**.
 
-**Commandes :**
+## 10. Limites et pistes d’amélioration
 
-```bash
-Rscript -e "shiny::runApp('dashboard')"
-```
+Limites :
 
-## 10. Limites 
+- dataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet.
 
-Dataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet.
+Améliorations :
+
+- l’utilisation de **techniques de calibration de probabilités**,  
+- une **évaluation économique du scoring** (expected loss).

@@ -7,7 +7,7 @@ Construire une chaîne décisionnelle **reproductible** de bout en bout pour le 
 - entraînement/évaluation de modèles,
 - calibration d’un seuil orienté risque (Recall défaut ≥ 80%),
 - production d’un **tableau de scores** et d’une **politique de décision à 3 niveaux** (*approve / review / reject*),
-- restitution via **rapport Quarto** et **dashboard Shiny**.
+- restitution via **rapport Quarto**, **dashboard Shiny** et **dashboard Streamlit**.
 
 ## Données
 
@@ -20,6 +20,9 @@ Construire une chaîne décisionnelle **reproductible** de bout en bout pour le 
 ```text
 Credit-Risk-Scoring/
 │
+├── app/                     # Applications
+│   ├── shiny_app
+│   ├── streamlit_app
 ├── R/                       # Scripts du pipeline
 │   ├── 00_config.R
 │   ├── 00_prepare_raw.R
@@ -46,10 +49,9 @@ Credit-Risk-Scoring/
 ├── reports/
 │   └── report.qmd           # Rapport Quarto (HTML)
 │
-├── dashboard/               # Mini-dashboard Shiny
-├── index.qmd
 ├── session_info.txt         # Informations de session R (reproductibilité)
 ├── README.md
+├── renv.lock
 └── Credit-Risk-Scoring.Rproj
 ```
 ---
@@ -105,50 +107,30 @@ Cette logique reflète une **approche prudente** adaptée aux enjeux du risque d
 ## 🧱 Technologies utilisées
 
 -	R : pour l'analyse des données, modélisation et restitution décisionnelle
+-   Python : pour la création de la page streamlit
 -	RStudio : environnement de développement
 -	Quarto : pour la génération de rapports HTML reproductibles
--	Shiny : pour la création du dashboard interactif 
+-	Shiny & Streamlit : pour la création de dashboards interactifs illustrant l’interopérabilité entre R et Python
 -	GitHub Pages : pour le déploiement du rapport (Quarto)
 -	shinyapps.io : pour le déploiement du dashboard interactif (Shiny)
+-	Streamlit Cloud : pour le déploiement du dashboard interactif (Streamlit)
+
 
 ## 🌐 Déploiement
 
-Le projet est déployée et accessible à l’adresse suivante :
+Le projet est déployé et accessible via les interfaces suivantes :
 
-🔗 https://cedric-lebe.github.io/Credit-Risk-Scoring/
+- 📄 **Rapport analytique (Quarto)**  
+  Le rapport présente le contexte métier et les objectifs décisionnels, la structure des données, une analyse exploratoire orientée décision, la comparaison des modèles, l’interprétabilité du modèle retenu et la politique de décision crédit.
+  - 🔗 [Voir le rapport](https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html)
 
-Cette application centralise l’accès :
+- 📊 **Dashboard interactif Shiny**  
+  Visualisation des scores, exploration des décisions et filtrage des clients.
+  - 🔗 [Voir le dashboard Shiny](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/)
 
--	au rapport analytique (Quarto),
--	au dashboard interactif (Shiny).
-
-## 📄 Rapport analytique (Quarto)
-
-Le rapport analytique présente :
-
--	le contexte métier et les objectifs décisionnels,
--	la structure des données,
--	une EDA orientée décision,
--	la comparaison des modèles,
--	l’interprétabilité du modèle retenu,
--	la politique de décision crédit.
-
-Accès direct au rapport :
-
-🔗 https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html
-
-## 📊 Dashboard interactif (Shiny)
-
-Le dashboard permet :
-
--	d’explorer la distribution des scores de défaut,
--	de filtrer par décision et probabilité de défaut,
--	d’identifier les clients à risque élevé,
--	de télécharger les résultats filtrés.
-
-Accès direct au dashboard :
-
-🔗 https://cedric-lebe.shinyapps.io/credit-risk-dashboard/
+- 📈 **Dashboard interactif Streamlit**  
+  Interface alternative développée en Python, illustrant l’interopérabilité **R / Python**.
+  - 🔗 [Voir le dashboard Streamlit](https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html)
 
 ## ⚡ Exécution rapide en local
 
@@ -170,19 +152,31 @@ Rscript -e "renv::restore()"
 Rscript -e "source('R/run_all.R')"
 ```
 
-### 4. Générer l'application (Rapport + Dashboard)
+### 4. Générer le rapport 
 ```bash
 quarto render
 open reports/_site/index.html
 ```
 
-### 5. Générer uniquement le rapport 
+### 5. Générer l'application Shiny
 ```bash
-quarto render
-open reports/_site/reports/report.html
+Rscript -e "shiny::runApp('app/shiny_app')"
 ```
 
-### 6. Générer uniquement le Dashbord
+### 6. Générer l'application Streamlit
 ```bash
-Rscript -e "shiny::runApp('dashboard')"
+# Créer et activer un environnement virtuel
+python3 -m venv .venv
+
+# Sur Linux/Mac :
+source .venv/bin/activate
+
+# Sur Windows :
+.venv\Scripts\activate
+
+# Installer les dépendances
+pip install -r app/streamlit_app/requirements.txt
+
+# Lancer l'application Streamlit
+streamlit run app/streamlit_app/app.py 
 ```

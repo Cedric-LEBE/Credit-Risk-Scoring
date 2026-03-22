@@ -37,3 +37,10 @@ rsconnect/
 .DS_Store
 Thumbs.db
 **/*.quarto_ipynb
+
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp   
