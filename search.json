@@ -4,14 +4,14 @@
     "href": "reports/report.html",
     "title": "Credit Risk Scoring (Score de défaut client)",
     "section": "",
-    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle)\nreject : risque élevé"
   },
   {
     "objectID": "reports/report.html#objectif-décisionnel",
     "href": "reports/report.html#objectif-décisionnel",
     "title": "Credit Risk Scoring (Score de défaut client)",
     "section": "",
-    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle / garanties)\nreject : risque élevé"
+    "text": "L’objectif est de scorer le risque de défaut d’un client afin de soutenir une décision de crédit. La sortie attendue est un tableau de scores (probabilité de défaut) et une politique de décision opérationnelle :\n\napprove : risque faible\nreview : risque intermédiaire (analyse manuelle)\nreject : risque élevé"
   },
   {
     "objectID": "reports/report.html#données",
@@ -39,7 +39,7 @@
     "href": "reports/report.html#modélisation",
     "title": "Credit Risk Scoring (Score de défaut client)",
     "section": "5. Modélisation",
-    "text": "5. Modélisation\nDeux modèles ont été comparés :\n\nRégression logistique (baseline interprétable)\nArbre de décision (tuning léger)\n\n\n\n\n  \n\n\n\nModèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité)."
+    "text": "5. Modélisation\nDeux modèles ont été comparés :\n\nRégression logistique (baseline interprétable)\nArbre de décision (tuning)\n\n\n\n\n  \n\n\n\nModèle retenu : Régression logistique (AUC supérieure et meilleure interprétabilité)."
   },
   {
     "objectID": "reports/report.html#interprétabilité-du-modèle-régression-logistique",
@@ -63,45 +63,17 @@
     "text": "8. Tableau de scores & recommandations\nLe scoring final inclut :\n\nprobabilité de défaut proba_default\ndécision (approve / review / reject)\n\n\n\n\n  \n\n\n\nRecommandations d’usage :\n\napprove : décision automatique\nreview : analyse manuelle / pièces complémentaires / garanties\nreject : rejet (ou validation manager selon politique)"
   },
   {
-    "objectID": "reports/report.html#dashboard-shiny",
-    "href": "reports/report.html#dashboard-shiny",
+    "objectID": "reports/report.html#dashboard-shiny-streamlit",
+    "href": "reports/report.html#dashboard-shiny-streamlit",
     "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "9. Dashboard Shiny",
-    "text": "9. Dashboard Shiny\nUne application Shiny est fournie dans l’onglet Dashboard.\nElle permet de :\n\nvisualiser la distribution des scores,\nfiltrer par décision,\nconsulter les lignes les plus risquées.\n\nLancement local :\nCommandes :\nRscript -e \"shiny::runApp('dashboard')\""
+    "section": "9. Dashboard Shiny & Streamlit",
+    "text": "9. Dashboard Shiny & Streamlit\nDeux applications interactives, Shiny et Streamlit, sont fournies et accessibles via les liens ci-dessous :\n\nShiny\nStreamlit\n\nCes applications permettent de :\n\nvisualiser la distribution des scores,\nfiltrer par décision,\nconsulter les utilisateurs les plus risqués.\n\nElles illustrent également l’interopérabilité entre R et Python, les visualisations Streamlit reposant sur des exports générés par le pipeline R."
   },
   {
-    "objectID": "reports/report.html#limites",
-    "href": "reports/report.html#limites",
+    "objectID": "reports/report.html#limites-et-pistes-damélioration",
+    "href": "reports/report.html#limites-et-pistes-damélioration",
     "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "10. Limites",
-    "text": "10. Limites\nDataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "",
-    "text": "Méthodologie, EDA, modélisation\nSeuils métier & politique de décision\nInterprétabilité (régression logistique)\n\n➡️ Ouvrir le rapport\n\n\n\n\n\nFiltrer les clients (decision / vérité / score)\nKPI & distribution des scores\nAnalyse seuils + top clients à risque\nExport CSV\n\n➡️ Ouvrir le dashboard"
-  },
-  {
-    "objectID": "index.html#accès-rapide",
-    "href": "index.html#accès-rapide",
-    "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "",
-    "text": "Méthodologie, EDA, modélisation\nSeuils métier & politique de décision\nInterprétabilité (régression logistique)\n\n➡️ Ouvrir le rapport\n\n\n\n\n\nFiltrer les clients (decision / vérité / score)\nKPI & distribution des scores\nAnalyse seuils + top clients à risque\nExport CSV\n\n➡️ Ouvrir le dashboard"
-  },
-  {
-    "objectID": "index.html#contexte",
-    "href": "index.html#contexte",
-    "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "Contexte",
-    "text": "Contexte\nCe projet met en œuvre une chaîne décisionnelle complète de scoring crédit :\n\ningestion → préparation → features → modèle → scoring\nrestitution : rapport Quarto + dashboard Shiny\nreproductibilité : renv.lock"
-  },
-  {
-    "objectID": "index.html#exécution-locale",
-    "href": "index.html#exécution-locale",
-    "title": "Credit Risk Scoring (Score de défaut client)",
-    "section": "Exécution locale",
-    "text": "Exécution locale\n\nRestaurer les dépendances :\n\nRscript -e \"install.packages('renv', repos='https://cloud.r-project.org')\"\nRscript -e \"renv::restore()\"\n\nExécuter le pipeline :\n\nRscript -e \"source('R/run_all.R')\"\n\nGénérer le rapport :\n\nquarto render\n\nLancer le dashboard :\n\nRscript -e \"shiny::runApp('dashboard')\""
+    "section": "10. Limites et pistes d’amélioration",
+    "text": "10. Limites et pistes d’amélioration\nLimites :\n\ndataset encodé (Axx) : interprétation métier partielle sans dictionnaire complet.\n\nAméliorations :\n\nl’utilisation de techniques de calibration de probabilités,\n\nune évaluation économique du scoring (expected loss)."
   }
 ]
