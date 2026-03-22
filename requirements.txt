@@ -4,4 +4,3 @@ pyarrow
 plotly
 numpy
 matplotlib
-pyreadr
