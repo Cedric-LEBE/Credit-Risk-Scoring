@@ -130,7 +130,7 @@ Le projet est déployé et accessible via les interfaces suivantes :
 
 - 📈 **Dashboard interactif Streamlit**  
   Interface alternative développée en Python, illustrant l’interopérabilité **R / Python**.
-  - 🔗 [Voir le dashboard Streamlit](https://cedric-lebe.github.io/Credit-Risk-Scoring/reports/report.html)
+  - 🔗 [Voir le dashboard Streamlit](https://credit-default-scoring.streamlit.app/)
 
 ## ⚡ Exécution rapide en local
 
