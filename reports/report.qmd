@@ -408,8 +408,8 @@ Recommandations d’usage :
 
 Deux applications interactives, **Shiny** et **Streamlit**, sont fournies et accessibles via les liens ci-dessous :
 
-- [Shiny](https://cedric-lebe.shinyapps.io/credit-risk-dashboard/)
-- [Streamlit](https://cedric-lebe.cedric-lebe.streamlit.app/)
+- [Shiny](https://cedric-lebe.shinyapps.io/credit-risk-dashboard)
+- [Streamlit](https://credit-default-scoring.streamlit.app)
 
 Ces applications permettent de :
 
